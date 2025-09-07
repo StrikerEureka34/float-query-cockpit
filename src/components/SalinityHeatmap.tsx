@@ -26,51 +26,14 @@ const SalinityHeatmap = () => {
   };
 
   return (
-    <div className="w-full h-64 relative overflow-hidden rounded-lg">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-ocean-deep to-primary/20"></div>
-      
-      {/* Heatmap Grid */}
-      <div className="absolute inset-4 grid grid-rows-5 grid-cols-7 gap-1">
-        {salinityData.map((row, rowIndex) =>
-          row.map((salinity, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className={`${getColor(salinity)} rounded-sm relative group cursor-pointer transition-all hover:scale-110`}
-              style={{ opacity: getOpacity(salinity) }}
-            >
-              {/* Value Tooltip */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="glass-card p-1 rounded text-xs font-medium whitespace-nowrap">
-                  {salinity} PSU
-                </div>
-              </div>
-              
-              {/* Shimmer effect for high salinity */}
-              {salinity > 35.5 && (
-                <div className="absolute inset-0 bg-white/20 animate-pulse rounded-sm"></div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* Coordinate Labels */}
-      <div className="absolute top-2 left-2 text-xs text-muted-foreground">
-        20°N
-      </div>
-      <div className="absolute bottom-2 left-2 text-xs text-muted-foreground">
-        10°N
-      </div>
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground">
-        70°E
-      </div>
-      <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
-        75°E
+    <div className="w-full h-80 relative overflow-hidden rounded-lg">
+      {/* Title */}
+      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-sm font-medium text-primary text-center z-30">
+        Regional Salinity Distribution  
       </div>
 
       {/* Color Scale Legend */}
-      <div className="absolute top-2 right-2 glass-card p-2 rounded-lg">
+      <div className="absolute top-2 right-2 glass-card p-2 rounded-lg z-30 bg-background/80 backdrop-blur-sm">
         <div className="flex items-center gap-1 mb-2">
           <Droplets className="h-3 w-3 text-primary" />
           <span className="text-xs font-medium">Salinity (PSU)</span>
@@ -100,7 +63,7 @@ const SalinityHeatmap = () => {
       </div>
 
       {/* Stats */}
-      <div className="absolute bottom-2 left-2 glass-card p-2 rounded-lg">
+      <div className="absolute bottom-2 left-2 glass-card p-2 rounded-lg z-30 bg-background/80 backdrop-blur-sm">
         <div className="text-xs space-y-1">
           <div className="flex justify-between gap-4">
             <span className="text-muted-foreground">Bay of Bengal:</span>
@@ -117,9 +80,43 @@ const SalinityHeatmap = () => {
         </div>
       </div>
 
-      {/* Title */}
-      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 text-sm font-medium text-primary text-center">
-        Regional Salinity Distribution
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-ocean-deep to-primary/20 z-0"></div>
+      
+      {/* Heatmap Grid */}
+      <div className="absolute top-8 bottom-16 left-8 right-8 grid grid-rows-5 grid-cols-7 gap-1 z-10">
+        {salinityData.map((row, rowIndex) =>
+          row.map((salinity, colIndex) => (
+            <div
+              key={`${rowIndex}-${colIndex}`}
+              className={`${getColor(salinity)} rounded-sm relative group cursor-pointer transition-all hover:scale-110`}
+              style={{ opacity: getOpacity(salinity) }}
+            >
+              {/* Value Tooltip */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="glass-card p-1 rounded text-xs font-medium whitespace-nowrap">
+                  {salinity} PSU
+                </div>
+              </div>
+              
+              {/* Shimmer effect for high salinity */}
+              {salinity > 35.5 && (
+                <div className="absolute inset-0 bg-white/20 animate-pulse rounded-sm"></div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Coordinate Labels */}
+      <div className="absolute top-8 left-2 text-xs text-muted-foreground z-20">
+        20°N
+      </div>
+      <div className="absolute bottom-16 left-2 text-xs text-muted-foreground z-20">
+        10°N
+      </div>
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground z-20">
+        70°E - 75°E
       </div>
     </div>
   );

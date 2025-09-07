@@ -17,9 +17,31 @@ const TemperatureChart = () => {
   const minTemp = Math.min(...data.map(d => d.temp));
 
   return (
-    <div className="w-full h-64 relative overflow-hidden rounded-lg">
+    <div className="w-full h-80 relative overflow-hidden rounded-lg">
+      {/* Title */}
+      <div className="absolute top-2 left-2 text-sm font-medium text-primary z-30">
+        Temperature Profile - ARGO Float #3847
+      </div>
+
+      {/* Stats Overlay */}
+      <div className="absolute top-2 right-2 glass-card p-3 rounded-lg z-30 bg-background/80 backdrop-blur-sm">
+        <div className="text-xs space-y-2">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-3 w-3 text-accent" />
+            <span>Surface: {data[0].temp}°C</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <TrendingDown className="h-3 w-3 text-primary" />
+            <span>Deep: {data[data.length - 1].temp}°C</span>
+          </div>
+          <div className="text-coral font-medium">
+            Anomaly: +1.2°C @ 200m
+          </div>
+        </div>
+      </div>
+
       {/* Background Grid */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-10 z-0">
         <div className="grid grid-cols-10 grid-rows-8 h-full w-full">
           {Array.from({ length: 80 }, (_, i) => (
             <div key={i} className="border border-primary/30"></div>
@@ -28,10 +50,10 @@ const TemperatureChart = () => {
       </div>
 
       {/* Chart Container */}
-      <div className="absolute inset-4">
+      <div className="absolute inset-4 z-10">
         
         {/* Y-axis (Depth) */}
-        <div className="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between text-xs text-muted-foreground">
+        <div className="absolute left-0 top-8 bottom-8 w-12 flex flex-col justify-between text-xs text-muted-foreground z-20">
           <span>0m</span>
           <span>500m</span>
           <span>1000m</span>
@@ -40,7 +62,7 @@ const TemperatureChart = () => {
         </div>
 
         {/* X-axis (Temperature) */}
-        <div className="absolute bottom-0 left-12 right-0 h-8 flex justify-between items-end text-xs text-muted-foreground">
+        <div className="absolute bottom-0 left-12 right-0 h-8 flex justify-between items-end text-xs text-muted-foreground z-20">
           <span>0°C</span>
           <span>10°C</span>
           <span>20°C</span>
@@ -48,7 +70,7 @@ const TemperatureChart = () => {
         </div>
 
         {/* Chart Area */}
-        <div className="absolute top-0 bottom-8 left-12 right-0">
+        <div className="absolute top-8 bottom-8 left-12 right-16 z-15">
           <svg className="w-full h-full" viewBox="0 0 300 200">
             {/* Temperature Profile Line */}
             <path
@@ -116,28 +138,6 @@ const TemperatureChart = () => {
             </circle>
           </svg>
         </div>
-
-        {/* Stats Overlay */}
-        <div className="absolute top-2 right-2 glass-card p-3 rounded-lg">
-          <div className="text-xs space-y-2">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-3 w-3 text-accent" />
-              <span>Surface: {data[0].temp}°C</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TrendingDown className="h-3 w-3 text-primary" />
-              <span>Deep: {data[data.length - 1].temp}°C</span>
-            </div>
-            <div className="text-coral font-medium">
-              Anomaly: +1.2°C @ 200m
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Title */}
-      <div className="absolute top-2 left-2 text-sm font-medium text-primary">
-        Temperature Profile - ARGO Float #3847
       </div>
     </div>
   );
