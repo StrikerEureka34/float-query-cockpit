@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { RefreshCw, Wifi, WifiOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { RefreshCw, Wifi, WifiOff, AlertCircle, CheckCircle, ChevronUp, ChevronDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const DataFreshnessIndicator = () => {
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [status, setStatus] = useState<'fresh' | 'stale' | 'error'>('fresh');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     // Simulate data freshness checking
@@ -76,24 +78,31 @@ const DataFreshnessIndicator = () => {
   const StatusIcon = statusConfig.icon;
 
   return (
-    <Card className="fixed bottom-6 right-6 glass-panel p-4 w-80 animate-float">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold flex items-center gap-2">
-          <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-          Data Freshness
-        </h3>
-        <button
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-          className="p-1 hover:bg-muted/50 rounded-md transition-colors"
-        >
-          <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-        </button>
-      </div>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="fixed bottom-6 right-6 w-80">
+      <Card className="glass-panel p-4 animate-float">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold flex items-center gap-2">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            Data Freshness
+          </h3>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="p-1 hover:bg-muted/50 rounded-md transition-colors"
+            >
+              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            </button>
+            <CollapsibleTrigger asChild>
+              <button className="p-1 hover:bg-muted/50 rounded-md transition-colors">
+                {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+              </button>
+            </CollapsibleTrigger>
+          </div>
+        </div>
 
-      <div className="space-y-3">
-        {/* Status Badge */}
-        <Badge className={`${statusConfig.color} gap-2 w-full justify-start`}>
+        {/* Always visible status badge */}
+        <Badge className={`${statusConfig.color} gap-2 w-full justify-start mb-3`}>
           <StatusIcon className="h-4 w-4" />
           <div className="flex-1">
             <span className="font-medium">{statusConfig.label}</span>
@@ -101,37 +110,39 @@ const DataFreshnessIndicator = () => {
           </div>
         </Badge>
 
-        {/* Data Sources */}
-        <div className="space-y-2 text-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">IFREMER GDAC</span>
-            <span className="text-green-400">●</span>
+        <CollapsibleContent className="space-y-3">
+          {/* Data Sources */}
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">IFREMER GDAC</span>
+              <span className="text-green-400">●</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">INCOIS Regional</span>
+              <span className="text-green-400">●</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">BGC Parameters</span>
+              <span className="text-yellow-400">●</span>
+            </div>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">INCOIS Regional</span>
-            <span className="text-green-400">●</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">BGC Parameters</span>
-            <span className="text-yellow-400">●</span>
-          </div>
-        </div>
 
-        {/* Last Update */}
-        <div className="text-xs text-muted-foreground border-t border-border/30 pt-2">
-          <div className="flex justify-between">
-            <span>Last Update:</span>
-            <span>{lastUpdate.toLocaleDateString()} {lastUpdate.toLocaleTimeString()}</span>
+          {/* Last Update */}
+          <div className="text-xs text-muted-foreground border-t border-border/30 pt-2">
+            <div className="flex justify-between">
+              <span>Last Update:</span>
+              <span>{lastUpdate.toLocaleDateString()} {lastUpdate.toLocaleTimeString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Next Sync:</span>
+              <span className="text-primary">
+                {new Date(lastUpdate.getTime() + 6 * 60 * 60 * 1000).toLocaleTimeString()}
+              </span>
+            </div>
           </div>
-          <div className="flex justify-between">
-            <span>Next Sync:</span>
-            <span className="text-primary">
-              {new Date(lastUpdate.getTime() + 6 * 60 * 60 * 1000).toLocaleTimeString()}
-            </span>
-          </div>
-        </div>
-      </div>
-    </Card>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 };
 
