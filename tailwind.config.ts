@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        /* Ocean Custom Colors */
+        ocean: {
+          cyan: "hsl(var(--ocean-cyan))",
+          teal: "hsl(var(--ocean-teal))",
+          deep: "hsl(var(--deep-blue))",
+        },
+        coral: "hsl(var(--coral-red))",
+        glass: "hsl(var(--glass-bg))",
       },
       borderRadius: {
         lg: "var(--radius)",
