@@ -57,33 +57,45 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
 
     // Simulate AI response with different visualizations
     setTimeout(() => {
-      const responses = [
-        {
-          content: "I found 127 ARGO floats in the Arabian Sea with temperature anomalies above +0.5°C. Here's the spatial distribution:",
-          visualization: 'map' as const,
-          sqlQuery: "SELECT * FROM argo_floats WHERE region='arabian_sea' AND temp_anomaly > 0.5"
-        },
-        {
-          content: "Temperature profiles show significant warming at 200m depth. Peak anomaly: +1.2°C on July 15th.",
-          visualization: 'chart' as const,
-          sqlQuery: "SELECT depth, temperature, date FROM profiles WHERE float_id IN (SELECT id FROM argo_floats WHERE region='arabian_sea')"
-        },
-        {
-          content: "Salinity comparison reveals Bay of Bengal: 33.2 PSU avg, Arabian Sea: 35.8 PSU avg. 2.6 PSU difference detected.",
-          visualization: 'heatmap' as const,
-          sqlQuery: "SELECT AVG(salinity) FROM profiles GROUP BY region WHERE region IN ('bay_bengal', 'arabian_sea')"
-        }
-      ];
+      const query = inputValue.toLowerCase();
+      let response;
 
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      // Check for specific queries
+      if (query.includes('salinity') && query.includes('profile') && query.includes('equator') && query.includes('march 2023')) {
+        response = {
+          content: "Found 23 ARGO floats near the equator (±2°) with salinity profiles from March 2023. Average surface salinity: 34.6 PSU, with fresh lens at 50-80m depth (33.8 PSU). Strong halocline detected at 100-150m depth.",
+          visualization: 'chart' as const,
+          sqlQuery: "SELECT depth, salinity, latitude, longitude FROM profiles WHERE ABS(latitude) <= 2 AND date BETWEEN '2023-03-01' AND '2023-03-31' ORDER BY depth"
+        };
+      } else {
+        // Default responses for other queries
+        const responses = [
+          {
+            content: "I found 127 ARGO floats in the Arabian Sea with temperature anomalies above +0.5°C. Here's the spatial distribution:",
+            visualization: 'map' as const,
+            sqlQuery: "SELECT * FROM argo_floats WHERE region='arabian_sea' AND temp_anomaly > 0.5"
+          },
+          {
+            content: "Temperature profiles show significant warming at 200m depth. Peak anomaly: +1.2°C on July 15th.",
+            visualization: 'chart' as const,
+            sqlQuery: "SELECT depth, temperature, date FROM profiles WHERE float_id IN (SELECT id FROM argo_floats WHERE region='arabian_sea')"
+          },
+          {
+            content: "Salinity comparison reveals Bay of Bengal: 33.2 PSU avg, Arabian Sea: 35.8 PSU avg. 2.6 PSU difference detected.",
+            visualization: 'heatmap' as const,
+            sqlQuery: "SELECT AVG(salinity) FROM profiles GROUP BY region WHERE region IN ('bay_bengal', 'arabian_sea')"
+          }
+        ];
+        response = responses[Math.floor(Math.random() * responses.length)];
+      }
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: randomResponse.content,
+        content: response.content,
         timestamp: new Date(),
-        visualization: randomResponse.visualization,
-        sqlQuery: randomResponse.sqlQuery,
+        visualization: response.visualization,
+        sqlQuery: response.sqlQuery,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -154,9 +166,9 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
             <span>Try:</span>
             <button 
               className="text-primary hover:underline"
-              onClick={() => setInputValue("Show me salinity anomalies in Bay of Bengal")}
+              onClick={() => setInputValue("Show me salinity profiles near the equator in March 2023")}
             >
-              Salinity anomalies
+              Salinity profiles
             </button>
             <span>•</span>
             <button 
