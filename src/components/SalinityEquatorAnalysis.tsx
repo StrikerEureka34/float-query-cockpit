@@ -14,14 +14,14 @@ const SalinityEquatorAnalysis = () => {
       </div>
 
       {/* Combined Visualizations */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {/* Salinity Profile Chart */}
-        <div className="glass-card rounded-lg overflow-hidden">
+        <div className="glass-card rounded-lg overflow-hidden bg-background/50 backdrop-blur-sm border border-border/30">
           <SalinityProfileChart />
         </div>
 
         {/* Float Location Map */}
-        <div className="glass-card rounded-lg overflow-hidden">
+        <div className="glass-card rounded-lg overflow-hidden bg-background/50 backdrop-blur-sm border border-border/30">
           <EquatorFloatMap />
         </div>
       </div>

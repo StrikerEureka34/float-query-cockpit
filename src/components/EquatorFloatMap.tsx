@@ -3,11 +3,11 @@ import { MapPin, Activity } from 'lucide-react';
 const EquatorFloatMap = () => {
   // Mock ARGO float positions near equator
   const floatLocations = [
-    { id: 'Float-2901832', lat: 2.1, lon: 15.3, status: 'active', lastProfile: '2023-03-28' },
-    { id: 'Float-2902156', lat: -1.8, lon: 42.7, status: 'active', lastProfile: '2023-03-29' },
-    { id: 'Float-2901965', lat: 3.2, lon: 28.9, status: 'active', lastProfile: '2023-03-27' },
-    { id: 'Float-2901743', lat: -0.5, lon: 35.1, status: 'inactive', lastProfile: '2023-03-15' },
-    { id: 'Float-2902034', lat: 1.9, lon: 48.6, status: 'active', lastProfile: '2023-03-30' },
+    { id: 'Float-2901832', lat: 2.1, lon: 15.3, status: 'active', lastProfile: '2023-03-28', inChart: true },
+    { id: 'Float-2902156', lat: -1.8, lon: 42.7, status: 'active', lastProfile: '2023-03-29', inChart: true },
+    { id: 'Float-2901965', lat: 3.2, lon: 28.9, status: 'active', lastProfile: '2023-03-27', inChart: true, hasAnomaly: true },
+    { id: 'Float-2901743', lat: -0.5, lon: 35.1, status: 'inactive', lastProfile: '2023-03-15', inChart: false },
+    { id: 'Float-2902034', lat: 1.9, lon: 48.6, status: 'active', lastProfile: '2023-03-30', inChart: false },
   ];
 
   // Convert lat/lon to SVG coordinates
@@ -27,18 +27,24 @@ const EquatorFloatMap = () => {
       </div>
 
       {/* Legend */}
-      <div className="absolute top-2 right-2 glass-card p-3 rounded-lg z-30 bg-background/80 backdrop-blur-sm">
+      <div className="absolute top-2 right-2 glass-card p-3 rounded-lg z-30 bg-background/90 backdrop-blur-sm border border-border/30">
         <div className="text-xs space-y-2">
+          <div className="font-medium text-primary mb-2">Float Status</div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
+            <span>In Chart Analysis</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-ocean-cyan rounded-full"></div>
             <span>Active Float</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-muted-foreground rounded-full"></div>
             <span>Inactive Float</span>
           </div>
-          <div className="text-ocean-cyan font-medium">
-            March 2023 Data
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+            <span>Anomaly Detected</span>
           </div>
         </div>
       </div>
@@ -100,20 +106,36 @@ const EquatorFloatMap = () => {
             {floatLocations.map((float, i) => {
               const pos = mapToSvg(float.lat, float.lon);
               const isActive = float.status === 'active';
+              const inChart = (float as any).inChart;
+              const hasAnomaly = (float as any).hasAnomaly;
               
               return (
                 <g key={i}>
-                  {/* Outer ring animation for active floats */}
-                  {isActive && (
+                  {/* Outer ring animation for floats in chart */}
+                  {inChart && (
                     <circle
                       cx={pos.x}
                       cy={pos.y}
-                      r="12"
+                      r="15"
                       fill="none"
                       stroke="hsl(var(--primary))"
+                      strokeWidth="2"
+                      opacity="0.8"
+                      className="animate-ping"
+                    />
+                  )}
+                  
+                  {/* Anomaly indicator */}
+                  {hasAnomaly && (
+                    <circle
+                      cx={pos.x}
+                      cy={pos.y}
+                      r="10"
+                      fill="none"
+                      stroke="#ef4444"
                       strokeWidth="1"
                       opacity="0.6"
-                      className="animate-ping"
+                      className="animate-pulse"
                     />
                   )}
                   
@@ -122,16 +144,23 @@ const EquatorFloatMap = () => {
                     cx={pos.x}
                     cy={pos.y}
                     r="6"
-                    fill={isActive ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))"}
+                    fill={
+                      hasAnomaly ? "#ef4444" :
+                      inChart ? "hsl(var(--primary))" :
+                      isActive ? "hsl(var(--ocean-cyan))" : 
+                      "hsl(var(--muted-foreground))"
+                    }
                     stroke="white"
                     strokeWidth="2"
-                    className={isActive ? "animate-pulse-glow" : ""}
+                    className={inChart ? "animate-pulse-glow" : ""}
                   >
                     <title>
                       {float.id}
                       {'\n'}Position: {float.lat.toFixed(1)}°, {float.lon.toFixed(1)}°
                       {'\n'}Last Profile: {float.lastProfile}
                       {'\n'}Status: {float.status}
+                      {inChart ? '\n✓ Used in chart analysis' : ''}
+                      {hasAnomaly ? '\n⚠️ Anomaly detected at 200m' : ''}
                     </title>
                   </circle>
 

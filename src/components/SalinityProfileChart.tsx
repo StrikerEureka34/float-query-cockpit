@@ -57,15 +57,22 @@ const SalinityProfileChart = () => {
         Salinity Profiles - Equatorial Region (March 2023)
       </div>
 
-      {/* Legend */}
-      <div className="absolute top-2 right-2 glass-card p-3 rounded-lg z-30 bg-background/80 backdrop-blur-sm">
-        <div className="text-xs space-y-1">
+      {/* Legend - Positioned outside plot area */}
+      <div className="absolute top-2 right-4 glass-card p-3 rounded-lg z-30 bg-background/90 backdrop-blur-sm border border-border/30 min-w-32">
+        <div className="text-xs space-y-2">
+          <div className="font-medium text-primary mb-2">Float Profiles</div>
           {floatProfiles.map((profile, i) => (
             <div key={i} className="flex items-center gap-2">
-              <div className="w-3 h-0.5 rounded" style={{ backgroundColor: profile.color }}></div>
-              <span className="text-xs">{profile.id}</span>
+              <div className="w-4 h-1 rounded" style={{ backgroundColor: profile.color }}></div>
+              <span className="text-xs">{profile.id.split('-')[1]}</span>
             </div>
           ))}
+          <div className="border-t border-border/30 pt-2 mt-2">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+              <span className="text-xs text-red-400">Anomaly</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -99,14 +106,14 @@ const SalinityProfileChart = () => {
         </div>
 
         {/* Chart Area */}
-        <div className="absolute top-8 bottom-8 left-12 right-16 z-15">
-          <svg className="w-full h-full" viewBox="0 0 300 200">
+        <div className="absolute top-8 bottom-8 left-12 right-40 z-15">
+          <svg className="w-full h-full" viewBox="0 0 280 200">
             {/* Salinity Profile Lines */}
             {floatProfiles.map((profile, profileIndex) => (
               <g key={profileIndex}>
                 <path
                   d={profile.data.map((point, i) => {
-                    const x = ((point.salinity - 34.0) / 1.5) * 280;
+                    const x = ((point.salinity - 34.0) / 1.5) * 260;
                     const y = (point.depth / 1500) * 180;
                     return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
                   }).join(' ')}
@@ -118,7 +125,7 @@ const SalinityProfileChart = () => {
 
                 {/* Data Points */}
                 {profile.data.map((point, i) => {
-                  const x = ((point.salinity - 34.0) / 1.5) * 280;
+                  const x = ((point.salinity - 34.0) / 1.5) * 260;
                   const y = (point.depth / 1500) * 180;
                   return (
                     <circle
@@ -136,11 +143,36 @@ const SalinityProfileChart = () => {
               </g>
             ))}
 
+            {/* Anomaly Marker at 200m depth for Float-2901965 */}
+            <g>
+              <circle
+                cx={((35.2 - 34.0) / 1.5) * 260}
+                cy={(200 / 1500) * 180}
+                r="6"
+                fill="#ef4444"
+                stroke="#ffffff"
+                strokeWidth="2"
+                className="animate-pulse"
+              >
+                <title>Anomaly: Float-2901965 at 200m depth - 35.2 PSU (elevated)</title>
+              </circle>
+              <circle
+                cx={((35.2 - 34.0) / 1.5) * 260}
+                cy={(200 / 1500) * 180}
+                r="12"
+                fill="none"
+                stroke="#ef4444"
+                strokeWidth="1"
+                opacity="0.6"
+                className="animate-ping"
+              />
+            </g>
+
             {/* Halocline Indicator */}
             <rect
               x="0"
               y="60"
-              width="280"
+              width="260"
               height="40"
               fill="hsl(var(--primary))"
               fillOpacity="0.1"
