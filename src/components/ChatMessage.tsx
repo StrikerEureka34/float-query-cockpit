@@ -4,13 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import OceanMap from '@/components/OceanMap';
 import TemperatureChart from '@/components/TemperatureChart';
 import SalinityHeatmap from '@/components/SalinityHeatmap';
+import SalinityEquatorAnalysis from '@/components/SalinityEquatorAnalysis';
 
 interface Message {
   id: string;
   type: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  visualization?: 'map' | 'chart' | 'heatmap';
+  visualization?: 'map' | 'chart' | 'heatmap' | 'salinity-equator';
   sqlQuery?: string;
 }
 
@@ -62,13 +63,15 @@ const ChatMessage = ({ message, compact = false }: ChatMessageProps) => {
                   {message.visualization === 'map' && 'Spatial Analysis'}
                   {message.visualization === 'chart' && 'Temporal Analysis'}  
                   {message.visualization === 'heatmap' && 'Statistical Analysis'}
+                  {message.visualization === 'salinity-equator' && 'Equatorial Profile Analysis'}
                 </Badge>
               </div>
               
               <div className="bg-background/30 rounded-lg p-3 border border-border/30">
-                {message.visualization === 'map' && <OceanMap />}
-                {message.visualization === 'chart' && <TemperatureChart />}
-                {message.visualization === 'heatmap' && <SalinityHeatmap />}
+            {message.visualization === 'map' && <OceanMap />}
+            {message.visualization === 'chart' && <TemperatureChart />}
+            {message.visualization === 'heatmap' && <SalinityHeatmap />}
+            {message.visualization === 'salinity-equator' && <SalinityEquatorAnalysis />}
               </div>
             </div>
           )}
