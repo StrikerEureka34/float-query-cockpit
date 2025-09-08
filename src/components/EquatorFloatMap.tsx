@@ -26,25 +26,25 @@ const EquatorFloatMap = () => {
         ARGO Float Locations - Equatorial Region
       </div>
 
-      {/* Legend - Responsive positioning outside plot area */}
-      <div className="absolute top-2 right-2 lg:right-4 xl:right-6 glass-card p-3 rounded-lg z-40 bg-gradient-to-br from-background/95 to-ocean-cyan/10 backdrop-blur-sm border border-ocean-cyan/20 shadow-lg min-w-40 max-w-48">
+      {/* Legend */}
+      <div className="absolute top-2 right-2 glass-card p-3 rounded-lg z-30 bg-background/90 backdrop-blur-sm border border-border/30">
         <div className="text-xs space-y-2">
-          <div className="font-semibold text-ocean-cyan mb-2 border-b border-ocean-cyan/30 pb-1">Float Status</div>
-          <div className="flex items-center gap-2 hover:bg-primary/5 p-1 rounded transition-colors">
-            <div className="w-3 h-3 bg-primary rounded-full animate-pulse shadow-sm"></div>
-            <span className="font-medium">In Chart Analysis</span>
+          <div className="font-medium text-primary mb-2">Float Status</div>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-primary rounded-full animate-pulse"></div>
+            <span>In Chart Analysis</span>
           </div>
-          <div className="flex items-center gap-2 hover:bg-ocean-cyan/5 p-1 rounded transition-colors">
-            <div className="w-3 h-3 bg-ocean-cyan rounded-full shadow-sm"></div>
-            <span className="font-medium">Active Float</span>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-ocean-cyan rounded-full"></div>
+            <span>Active Float</span>
           </div>
-          <div className="flex items-center gap-2 hover:bg-muted-foreground/5 p-1 rounded transition-colors">
-            <div className="w-3 h-3 bg-muted-foreground rounded-full shadow-sm"></div>
-            <span className="font-medium">Inactive Float</span>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-muted-foreground rounded-full"></div>
+            <span>Inactive Float</span>
           </div>
-          <div className="flex items-center gap-2 hover:bg-red-500/5 p-1 rounded transition-colors">
-            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-sm"></div>
-            <span className="text-red-400 font-medium">Anomaly Detected</span>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+            <span>Anomaly Detected</span>
           </div>
         </div>
       </div>
@@ -84,8 +84,8 @@ const EquatorFloatMap = () => {
           <span>60°E</span>
         </div>
 
-        {/* Map Area - Adjusted right margin for legend */}
-        <div className="absolute top-8 bottom-8 left-12 right-44 lg:right-52 xl:right-56 z-15">
+        {/* Map Area */}
+        <div className="absolute top-8 bottom-8 left-12 right-16 z-15">
           <svg className="w-full h-full" viewBox="0 0 300 200">
             {/* Equator Line */}
             <line 

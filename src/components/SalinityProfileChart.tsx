@@ -57,20 +57,20 @@ const SalinityProfileChart = () => {
         Salinity Profiles - Equatorial Region (March 2023)
       </div>
 
-      {/* Legend - Responsive positioning outside plot area */}
-      <div className="absolute top-2 right-2 lg:right-4 xl:right-6 glass-card p-3 rounded-lg z-40 bg-gradient-to-br from-background/95 to-primary/10 backdrop-blur-sm border border-primary/20 shadow-lg min-w-36 max-w-44">
+      {/* Legend - Positioned outside plot area */}
+      <div className="absolute top-2 right-4 glass-card p-3 rounded-lg z-30 bg-background/90 backdrop-blur-sm border border-border/30 min-w-32">
         <div className="text-xs space-y-2">
-          <div className="font-semibold text-primary mb-2 border-b border-primary/30 pb-1">Float Profiles</div>
+          <div className="font-medium text-primary mb-2">Float Profiles</div>
           {floatProfiles.map((profile, i) => (
-            <div key={i} className="flex items-center gap-2 hover:bg-primary/5 p-1 rounded transition-colors">
-              <div className="w-4 h-1.5 rounded shadow-sm" style={{ backgroundColor: profile.color }}></div>
-              <span className="text-xs font-medium">{profile.id.split('-')[1]}</span>
+            <div key={i} className="flex items-center gap-2">
+              <div className="w-4 h-1 rounded" style={{ backgroundColor: profile.color }}></div>
+              <span className="text-xs">{profile.id.split('-')[1]}</span>
             </div>
           ))}
-          <div className="border-t border-primary/30 pt-2 mt-2">
-            <div className="flex items-center gap-2 hover:bg-red-500/5 p-1 rounded transition-colors">
-              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-sm"></div>
-              <span className="text-xs text-red-400 font-medium">Anomaly</span>
+          <div className="border-t border-border/30 pt-2 mt-2">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+              <span className="text-xs text-red-400">Anomaly</span>
             </div>
           </div>
         </div>
@@ -105,15 +105,15 @@ const SalinityProfileChart = () => {
           <span>35.5</span>
         </div>
 
-        {/* Chart Area - Adjusted right margin for legend */}
-        <div className="absolute top-8 bottom-8 left-12 right-44 lg:right-48 xl:right-52 z-15">
-          <svg className="w-full h-full" viewBox="0 0 240 200">
+        {/* Chart Area */}
+        <div className="absolute top-8 bottom-8 left-12 right-40 z-15">
+          <svg className="w-full h-full" viewBox="0 0 280 200">
             {/* Salinity Profile Lines */}
             {floatProfiles.map((profile, profileIndex) => (
               <g key={profileIndex}>
                 <path
                   d={profile.data.map((point, i) => {
-                    const x = ((point.salinity - 34.0) / 1.5) * 220;
+                    const x = ((point.salinity - 34.0) / 1.5) * 260;
                     const y = (point.depth / 1500) * 180;
                     return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
                   }).join(' ')}
@@ -125,7 +125,7 @@ const SalinityProfileChart = () => {
 
                 {/* Data Points */}
                 {profile.data.map((point, i) => {
-                  const x = ((point.salinity - 34.0) / 1.5) * 220;
+                  const x = ((point.salinity - 34.0) / 1.5) * 260;
                   const y = (point.depth / 1500) * 180;
                   return (
                     <circle
@@ -146,7 +146,7 @@ const SalinityProfileChart = () => {
             {/* Anomaly Marker at 200m depth for Float-2901965 */}
             <g>
               <circle
-                cx={((35.2 - 34.0) / 1.5) * 220}
+                cx={((35.2 - 34.0) / 1.5) * 260}
                 cy={(200 / 1500) * 180}
                 r="6"
                 fill="#ef4444"
@@ -157,7 +157,7 @@ const SalinityProfileChart = () => {
                 <title>Anomaly: Float-2901965 at 200m depth - 35.2 PSU (elevated)</title>
               </circle>
               <circle
-                cx={((35.2 - 34.0) / 1.5) * 220}
+                cx={((35.2 - 34.0) / 1.5) * 260}
                 cy={(200 / 1500) * 180}
                 r="12"
                 fill="none"
@@ -172,7 +172,7 @@ const SalinityProfileChart = () => {
             <rect
               x="0"
               y="60"
-              width="220"
+              width="260"
               height="40"
               fill="hsl(var(--primary))"
               fillOpacity="0.1"
