@@ -66,6 +66,9 @@ export default {
         coral: "hsl(var(--coral-red))",
         glass: "hsl(var(--glass-bg))",
       },
+      fontFamily: {
+        'mono': ['JetBrains Mono', 'monospace'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

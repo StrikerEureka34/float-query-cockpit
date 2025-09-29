@@ -16,7 +16,7 @@ interface Message {
   type: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  visualization?: 'map' | 'chart' | 'heatmap' | 'salinity-equator';
+  visualization?: 'map' | 'chart' | 'heatmap' | 'salinity-equator' | 'interactive-map' | 'interactive-chart';
   sqlQuery?: string;
 }
 
@@ -63,9 +63,9 @@ const ChatInterface = ({ compact = false }: ChatInterfaceProps) => {
       // Check for specific queries
       if (query.includes('salinity') && query.includes('profile') && query.includes('equator') && query.includes('march 2023')) {
         response = {
-          content: "Found 5 ARGO floats near the equator (±5°) with salinity profiles from March 2023. Surface salinity ranges from 35.0-35.4 PSU, with fresh lens formation at 50-100m depth. Halocline zone clearly visible at 100-200m depth across all profiles. Anomaly detected at ~200m depth in Float-2901965 showing elevated salinity (35.2 PSU).",
-          visualization: 'salinity-equator' as const,
-          sqlQuery: "SELECT depth, salinity, latitude, longitude, float_id FROM profiles WHERE ABS(latitude) <= 5 AND date BETWEEN '2023-03-01' AND '2023-03-31' ORDER BY float_id, depth"
+          content: "Found 3 ARGO profiles in the equatorial region (±5°) from March 2023 Global Index. Surface salinity ranges from 35.0-35.4 PSU, with fresh lens formation at 50-100m depth. Halocline zone clearly visible at 100-200m depth. Interactive visualization shows profile locations and depth-salinity relationships with downloadable data exports.",
+          visualization: Math.random() > 0.5 ? 'interactive-map' : 'interactive-chart' as const,
+          sqlQuery: "SELECT depth, salinity, latitude, longitude, profile_index FROM profiles WHERE ABS(latitude) <= 5 AND date BETWEEN '2023-03-01' AND '2023-03-31' ORDER BY profile_index, depth"
         };
       } else {
         // Default responses for other queries

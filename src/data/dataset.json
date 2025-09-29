@@ -1,0 +1,127 @@
+{
+  "datasets": [
+    {
+      "type": "geographic_map",
+      "description": "Geographic locations of March 2023 equatorial profiles",
+      "data": {
+        "profiles": [
+          {
+            "file_reference": "aoml/1900158/profiles/D1900158_017.nc",
+            "date": "20030902023423",
+            "latitude": 1.369,
+            "longitude": 69.947,
+            "profile_index": 7863,
+            "region": "equatorial",
+            "data_source": "global_argo_index"
+          },
+          {
+            "file_reference": "aoml/1900166/profiles/D1900166_008.nc",
+            "date": "20030502023525",
+            "latitude": 0.721,
+            "longitude": -8.789,
+            "profile_index": 8790,
+            "region": "equatorial",
+            "data_source": "global_argo_index"
+          },
+          {
+            "file_reference": "aoml/1900169/profiles/D1900169_016.nc",
+            "date": "20031202023233",
+            "latitude": 3.505,
+            "longitude": 54.757,
+            "profile_index": 9053,
+            "region": "equatorial",
+            "data_source": "global_argo_index"
+          }
+        ],
+        "total_profiles": 3,
+        "equatorial_bounds": {
+          "lat_min": -5,
+          "lat_max": 5
+        },
+        "target_month": "2023-03"
+      },
+      "coordinates": [
+        {
+          "latitude": 1.369,
+          "longitude": 69.947,
+          "date": "20030902023423",
+          "source": "global_argo_index"
+        },
+        {
+          "latitude": 0.721,
+          "longitude": -8.789,
+          "date": "20030502023525",
+          "source": "global_argo_index"
+        },
+        {
+          "latitude": 3.505,
+          "longitude": 54.757,
+          "date": "20031202023233",
+          "source": "global_argo_index"
+        }
+      ]
+    },
+    {
+      "type": "profile_data",
+      "description": "Salinity profile data for March 2023 equatorial region",
+      "data": {
+        "methodology": "Search through global Argo index and current datasets",
+        "search_criteria": {
+          "temporal": "March 2023",
+          "spatial": "Equatorial region (\u00b15 degrees latitude)",
+          "parameter": "Salinity (PSAL)"
+        },
+        "results": {
+          "candidates_found": 3,
+          "global_index_results": 3,
+          "current_dataset_results": 0
+        },
+        "profile_references": [
+          {
+            "file_reference": "aoml/1900158/profiles/D1900158_017.nc",
+            "date": "20030902023423",
+            "latitude": 1.369,
+            "longitude": 69.947,
+            "profile_index": 7863,
+            "region": "equatorial",
+            "data_source": "global_argo_index"
+          },
+          {
+            "file_reference": "aoml/1900166/profiles/D1900166_008.nc",
+            "date": "20030502023525",
+            "latitude": 0.721,
+            "longitude": -8.789,
+            "profile_index": 8790,
+            "region": "equatorial",
+            "data_source": "global_argo_index"
+          },
+          {
+            "file_reference": "aoml/1900169/profiles/D1900169_016.nc",
+            "date": "20031202023233",
+            "latitude": 3.505,
+            "longitude": 54.757,
+            "profile_index": 9053,
+            "region": "equatorial",
+            "data_source": "global_argo_index"
+          }
+        ]
+      }
+    },
+    {
+      "type": "temporal_chart",
+      "description": "Temporal distribution of March 2023 equatorial profiles",
+      "data": {
+        "dates": [
+          "20030902023423",
+          "20030502023525",
+          "20031202023233"
+        ],
+        "profile_count": 3,
+        "date_range": {
+          "start": "20030502023525",
+          "end": "20031202023233"
+        }
+      }
+    }
+  ]
+}

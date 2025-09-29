@@ -1,17 +1,20 @@
-import { Code, Database, Eye } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
+import { User, Bot, Database } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import OceanMap from '@/components/OceanMap';
 import TemperatureChart from '@/components/TemperatureChart';
 import SalinityHeatmap from '@/components/SalinityHeatmap';
 import SalinityEquatorAnalysis from '@/components/SalinityEquatorAnalysis';
+import InteractiveDataMap from '@/components/InteractiveDataMap';
+import InteractiveProfileChart from '@/components/InteractiveProfileChart';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface Message {
   id: string;
   type: 'user' | 'assistant';
   content: string;
   timestamp: Date;
-  visualization?: 'map' | 'chart' | 'heatmap' | 'salinity-equator';
+  visualization?: 'map' | 'chart' | 'heatmap' | 'salinity-equator' | 'interactive-map' | 'interactive-chart';
   sqlQuery?: string;
 }
 
@@ -21,6 +24,15 @@ interface ChatMessageProps {
 }
 
 const ChatMessage = ({ message, compact = false }: ChatMessageProps) => {
+  const [isLoading, setIsLoading] = React.useState(message.type === 'assistant' && !!message.visualization);
+
+  React.useEffect(() => {
+    if (message.type === 'assistant' && message.visualization) {
+      const timer = setTimeout(() => setIsLoading(false), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   const isUser = message.type === 'user';
 
   return (
@@ -30,9 +42,9 @@ const ChatMessage = ({ message, compact = false }: ChatMessageProps) => {
         isUser ? 'bg-primary/20' : 'bg-accent/20'
       }`}>
         {isUser ? (
-          <div className="w-2 h-2 bg-primary rounded-full"></div>
+          <User className="h-3 w-3 text-primary" />
         ) : (
-          <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+          <Bot className="h-3 w-3 text-accent" />
         )}
       </div>
 
@@ -41,44 +53,42 @@ const ChatMessage = ({ message, compact = false }: ChatMessageProps) => {
         <div className={`glass-card p-3 rounded-xl ${compact ? 'text-sm' : ''} ${
           isUser ? 'bg-primary/10' : 'bg-muted/30'
         }`}>
-          <p className="leading-relaxed">{message.content}</p>
+          <p className="leading-relaxed font-mono">{message.content}</p>
 
           {/* SQL Query Display */}
-          {message.sqlQuery && !compact && (
-            <div className="mt-3 p-2 bg-background/50 rounded-lg border border-border/30">
-              <div className="flex items-center gap-2 mb-1">
-                <Database className="h-3 w-3 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">Executed Query:</span>
+          {message.sqlQuery && (
+            <div className="mt-3 p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                <Database className="h-3 w-3" />
+                <span>Executed Query</span>
               </div>
-              <code className="text-xs font-mono text-primary">{message.sqlQuery}</code>
+              <code className="text-xs text-primary break-all font-mono">
+                {message.sqlQuery}
+              </code>
             </div>
           )}
 
-          {/* Embedded Visualization */}
-          {message.visualization && !compact && (
-            <div className="mt-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Eye className="h-4 w-4 text-primary" />
-                <Badge variant="secondary" className="text-xs">
-                  {message.visualization === 'map' && 'Spatial Analysis'}
-                  {message.visualization === 'chart' && 'Temporal Analysis'}  
-                  {message.visualization === 'heatmap' && 'Statistical Analysis'}
-                  {message.visualization === 'salinity-equator' && 'Equatorial Profile Analysis'}
-                </Badge>
-              </div>
-              
-              <div className="bg-background/30 rounded-lg p-3 border border-border/30">
-            {message.visualization === 'map' && <OceanMap />}
-            {message.visualization === 'chart' && <TemperatureChart />}
-            {message.visualization === 'heatmap' && <SalinityHeatmap />}
-            {message.visualization === 'salinity-equator' && <SalinityEquatorAnalysis />}
-              </div>
+          {/* Visualization Component */}
+          {message.visualization && (
+            <div className="mt-4 w-full">
+              {isLoading ? (
+                <LoadingSpinner message="Rendering oceanographic visualization..." />
+              ) : (
+                <>
+                  {message.visualization === 'map' && <OceanMap />}
+                  {message.visualization === 'chart' && <TemperatureChart />}
+                  {message.visualization === 'heatmap' && <SalinityHeatmap />}
+                  {message.visualization === 'salinity-equator' && <SalinityEquatorAnalysis />}
+                  {message.visualization === 'interactive-map' && <InteractiveDataMap compact={compact} />}
+                  {message.visualization === 'interactive-chart' && <InteractiveProfileChart compact={compact} />}
+                </>
+              )}
             </div>
           )}
         </div>
 
         {/* Timestamp */}
-        <p className="text-xs text-muted-foreground mt-1 px-1">
+        <p className="text-xs text-muted-foreground mt-1 px-1 font-mono">
           {message.timestamp.toLocaleTimeString()}
         </p>
       </div>
