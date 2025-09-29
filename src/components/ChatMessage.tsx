@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Bot, Database } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import OceanMap from '@/components/OceanMap';
@@ -24,9 +24,9 @@ interface ChatMessageProps {
 }
 
 const ChatMessage = ({ message, compact = false }: ChatMessageProps) => {
-  const [isLoading, setIsLoading] = React.useState(message.type === 'assistant' && !!message.visualization);
+  const [isLoading, setIsLoading] = useState(message.type === 'assistant' && !!message.visualization);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (message.type === 'assistant' && message.visualization) {
       const timer = setTimeout(() => setIsLoading(false), 1200);
       return () => clearTimeout(timer);
